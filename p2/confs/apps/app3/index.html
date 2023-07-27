@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>App 3</title>
+
+</head>
+<body>
+  <style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #eee;
+}
+
+.typing.animate {
+  width: 21ch;
+  border-right: 0.1em solid black;
+  font-family: monospace;
+  font-size: 2em;
+  animation: type 2.5s steps(20), writer 1s infinite alternate, delete 0.5s steps(5) 2.5s, type2 1s steps(4) 3s forwards, type3 3s steps(22, end) 6s forwards;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.typing.animate::before { 
+  content: "Hello from app3";
+  animation: type2 1s steps(4) 3s forwards, type3 3s steps(22, end) 6s forwards;
+}
+
+@keyframes type {
+  from {
+    width: 0;
+  }
+  to {
+    width: 21ch;
+  }
+}
+
+@keyframes type2 {
+  from {
+    width: 16ch;
+    content: "Hello, form app3"
+  }
+  to {
+    width: 20ch;
+    content: "Hello, form app3"
+  }
+}
+
+@keyframes type3 {
+  from {
+    width: 20ch;
+    content: "Hello, form app3, welcome to the website related to app3"
+  }
+  to {
+    width: 42ch;
+    content: "Hello, form app3, welcome to the website related to app3"
+  }
+}
+
+@keyframes writer {
+  50% {
+    border-color: transparent;
+  }
+}
+
+@keyframes delete {
+  from {
+    width: 21ch;
+  }
+  to {
+    width: 16ch;
+  }
+}
+  </style>
+<!-- partial:index.partial.html -->
+<div class="typing animate"></div>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
+  <script>
+    $(document).ready(() => {
+  let typingElement = $('.typing');
+
+  typingElement.on('click', (e) => {
+    typingElement.removeClass('animate');
+    setTimeout(() => typingElement.addClass('animate'), 1);
+  })
+});
+</script>
+
+</body>
+</html>

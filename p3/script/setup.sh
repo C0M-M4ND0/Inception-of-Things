@@ -22,7 +22,7 @@ install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
 
 #Create k3d cluster
-/usr/local/bin/k3d cluster create --agents 1 --wait
+/usr/local/bin/k3d cluster create --wait
 
 #Set kubeconfig
 mkdir /home/vagrant/.kube

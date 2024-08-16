@@ -4,19 +4,19 @@ sudo -i
 
 
 export K3S_KUBECONFIG_MODE="644"
-export INSTALL_K3S_EXEC="--bind-address=$MASTER --node-external-ip=$MASTER --flannel-iface=eth1"
+export INSTALL_K3S_EXEC="--bind-address=$MASTER --node-external-ip=$MASTER --flannel-iface=enp0s8"
 if [ ! -x "/usr/local/bin/k3s" ]; then
     curl -sfL https://get.k3s.io | sh -
 fi
 
-if [ ! -x "/bin/docker" ]; then
-    #install docker
-    yum install -y yum-utils
-    yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-    yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+if ! command -v docker &> /dev/null; then
+    apt update
+    apt install -y docker.io
+    systemctl enable docker
+    systemctl start docker
 fi
 
-systemctl start docker
+
 docker build -t app1:latest /tmp/confs/apps/app1
 docker build -t app2:latest /tmp/confs/apps/app2
 docker build -t app3:latest /tmp/confs/apps/app3

@@ -4,7 +4,7 @@
 MASTER = "192.168.56.110"
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "rockylinux/9"
+  config.vm.box = "ubuntu/bionic64"
 
   config.vm.define "oabdelhaS", primary: true do |master|
       master.vm.network "private_network", ip: MASTER

@@ -1,6 +1,8 @@
 #!/bin/bash
 
-sudo su
+sudo -i
+
+
 export K3S_KUBECONFIG_MODE="644"
 export INSTALL_K3S_EXEC="--bind-address=$MASTER --node-external-ip=$MASTER --flannel-iface=eth1"
 if [ ! -x "/usr/local/bin/k3s" ]; then

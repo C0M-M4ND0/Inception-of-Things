@@ -1,102 +1,57 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>App 2</title>
-
-</head>
-<body>
   <style>
     * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: #eee;
-}
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #eee;
+      font-family: Arial, sans-serif;
+    }
 
-.typing.animate {
-  width: 21ch;
-  border-right: 0.1em solid black;
-  font-family: monospace;
-  font-size: 2em;
-  animation: type 2.5s steps(20), writer 1s infinite alternate, delete 0.5s steps(5) 2.5s, type2 1s steps(4) 3s forwards, type3 3s steps(22, end) 6s forwards;
-  overflow: hidden;
-  white-space: nowrap;
-  cursor: pointer;
-}
+    .typing {
+      font-family: monospace;
+      font-size: 2em;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 0.15em solid black; /* Cursor effect */
+      animation: typing 4s steps(30, end), blink-caret 0.75s step-end infinite;
+    }
 
-.typing.animate::before { 
-  content: "Hello from app2";
-  animation: type2 1s steps(4) 3s forwards, type3 3s steps(22, end) 6s forwards;
-}
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 20ch; } /* Adjust width to fit text */
+    }
 
-@keyframes type {
-  from {
-    width: 0;
-  }
-  to {
-    width: 21ch;
-  }
-}
-
-@keyframes type2 {
-  from {
-    width: 16ch;
-    content: "Hello, from app2"
-  }
-  to {
-    width: 20ch;
-    content: "Hello, from app2"
-  }
-}
-
-@keyframes type3 {
-  from {
-    width: 20ch;
-    content: "Hello, from app2 , welcome to the website related to app2"
-  }
-  to {
-    width: 42ch;
-    content: "Hello, from app2 , welcome to the website related to app2"
-  }
-}
-
-@keyframes writer {
-  50% {
-    border-color: transparent;
-  }
-}
-
-@keyframes delete {
-  from {
-    width: 21ch;
-  }
-  to {
-    width: 16ch;
-  }
-}
+    @keyframes blink-caret {
+      from, to { border-color: transparent; }
+      50% { border-color: black; }
+    }
   </style>
-<!-- partial:index.partial.html -->
-<div class="typing animate"></div>
-<!-- partial -->
+</head>
+<body>
+  <div class="typing">👋 Welcome to App2!</div>
+
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
   <script>
     $(document).ready(() => {
-  let typingElement = $('.typing');
+      let typingElement = $('.typing');
 
-  typingElement.on('click', (e) => {
-    typingElement.removeClass('animate');
-    setTimeout(() => typingElement.addClass('animate'), 1);
-  })
-});
-</script>
-
+      typingElement.on('click', () => {
+        typingElement.removeClass('animate');
+        setTimeout(() => typingElement.addClass('animate'), 1);
+      });
+    });
+  </script>
 </body>
 </html>

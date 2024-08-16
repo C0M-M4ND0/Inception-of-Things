@@ -1,10 +1,15 @@
 #!/bin/bash
 
-#Install git and curl and tmux
+sudo -i
+
+
+#Install git and curl
 yum update
-yum install -y git curl tmux
+yum install -y git curl
 
 #Add port 31443 to firewall
+systemctl enable firewalld
+systemctl start firewalld
 firewall-cmd --permanent --add-port=31443/tcp
 firewall-cmd --reload
 

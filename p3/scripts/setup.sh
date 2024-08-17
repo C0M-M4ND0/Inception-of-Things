@@ -1,7 +1,12 @@
 #!/bin/bash
 
-sudo -i
+set -e
 
+# Check if script is running with sudo
+if [ "$EUID" -ne 0 ]; then
+    echo "Please run this script with sudo."
+    exit 1
+fi
 
 # Install git if not already installed
 if ! command -v git &> /dev/null; then
@@ -20,17 +25,22 @@ fi
 #Install kubectl
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+rm -rf kubectl
 
 #Install k3d
 curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
 
 #Create k3d cluster
-/usr/local/bin/k3d cluster create --wait
+/usr/local/bin/k3d cluster create --wait -a 1
 
 #Set kubeconfig
-mkdir /home/vagrant/.kube
-/usr/local/bin/k3d kubeconfig get k3s-default > /home/vagrant/.kube/config
-export KUBECONFIG=/home/vagrant/.kube/config
+# Check if ~/kube folder exists, if not create it
+if [ ! -d ~/.kube ]; then
+    mkdir ~/.kube
+fi
+
+/usr/local/bin/k3d kubeconfig get k3s-default > ~/.kube/config
+export KUBECONFIG=~/.kube/config
 
 #Create namespaces
 /usr/local/bin/kubectl create namespace argocd
@@ -54,12 +64,14 @@ start_port_forwarding() {
 }
 
 #Check if kubectl port-forward is successful, if not, retry every 5 seconds
+echo -n "waiting for ArgoCD port-forwarding to be successful..."
 while true; do
     if curl -s --max-time 2 http://localhost:31443 &> /dev/null; then
+        echo
         echo "ArgoCD port-forwarding is successful."
         break
     else
-        echo "ArgoCD port-forwarding failed. Retrying in 5 seconds..."
+        echo -n "."
         start_port_forwarding &> /dev/null &
         sleep 5
     fi
@@ -73,7 +85,7 @@ while [ -z "$argocd_password" ]; do
     echo -n "."
 done
 echo
-echo "ArgoCD password: $argocd_password"
+echo -e "ArgoCD password: \e[1;32m$argocd_password\e[0m"
 
 #Clone app from github repository to /tmp
 git clone https://github.com/C0M-M4ND0/oabdelha.git /tmp/oabdelha
